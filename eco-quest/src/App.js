@@ -1,25 +1,32 @@
-import logo from './logo.svg';
+import * as React from 'react';
 import './App.css';
+import { HashRouter as Router, Routes, Route} from 'react-router-dom'
+import { Home } from './pages/home.tsx'
+import { CarbonFootprintCalculator } from './pages/carbon-footprint-calculator.tsx'
+import { Leaderboard } from './pages/leaderboard.tsx'
+import { Profile } from './pages/profile.tsx'
+import { Layout } from './Layout.tsx'
+import {NextUIProvider} from "@nextui-org/react";
 
-function App() {
+
+function App({ Component }) {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <NextUIProvider>
+        <Router>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Home />}/>
+              <Route path="/carbon-footprint-calculator" element={<CarbonFootprintCalculator />}/>
+              <Route path="/leaderboard" element={<Leaderboard />}/>
+              <Route path="/profile" element={<Profile />}/> 
+            </Route>
+          </Routes>
+        </Router>
+      </NextUIProvider>
+    </>
+  )
 }
 
 export default App;
