@@ -6,12 +6,14 @@ import { CarbonFootprintCalculator } from './pages/carbon-footprint-calculator.t
 import { Leaderboard } from './pages/leaderboard.tsx'
 import { Profile } from './pages/profile.tsx'
 import { Layout } from './Layout.tsx'
+import {NextUIProvider} from "@nextui-org/react";
 
 
 function App({ Component }) {
 
   return (
     <>
+      <NextUIProvider>
         <Router>
           <Routes>
             <Route element={<Layout />}>
@@ -22,6 +24,7 @@ function App({ Component }) {
             </Route>
           </Routes>
         </Router>
+      </NextUIProvider>
     </>
   )
 }
