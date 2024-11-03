@@ -13,7 +13,7 @@ export function NavBar() {
   return (
     <Navbar>
       <NavbarBrand>
-        <p className="font-bold text-inherit">EcoQuest</p>
+        <p className="font-bold text-inherit text-xl font-serif text-primary">EcoQuest</p>
       </NavbarBrand>
       <NavbarContent className="sm:flex gap-4" justify="center">
         <NavbarItem>

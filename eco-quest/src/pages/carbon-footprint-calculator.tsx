@@ -5,61 +5,75 @@ import PlusIcon from '../icons/plus-icon.tsx'
 import MinusIcon from '../icons/minus-icon.tsx'
 
 export function CarbonFootprintCalculator() {
-    const [carInfo, setCarInfo] = useState([{carType: "", milesDriven: "", id: 0}]);
-    const [pubTransInfo, setPubTransInfo] = useState([{pubTransType: "", milesTraveled: "", id: 0}])
 
-    const [userInputs, setUserInputs] = useState({waterVal: "", gasVal: "", electricityVal: "", carInfoVal: {carInfo}, pubTransInfoVal: {pubTransInfo}, grainsVal: "", legumesVal: "", fruitVal: "", vegetablesVal: "", nonDairyMilkVal: "", dairyVal: "", eggsVal: "", seafoodVal: "", meatVal: "", nutsVal: "", sugarVal: "", coffeeVal: "", wasteVal: "", clothingVal: ""});
+    const [userInputs, setUserInputs] = useState({waterVal: "", gasVal: "", electricityVal: "", carInfo: {carType: "", milesDriven: ""}, grainsVal: "", legumesVal: "", fruitVal: "", vegetablesVal: "", nonDairyMilkVal: "", dairyVal: "", eggsVal: "", seafoodVal: "", meatVal: "", nutsVal: "", sugarVal: "", coffeeVal: "", wasteVal: "", clothingVal: ""});
     const setNewUserInputs = ((e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
         setUserInputs(prevUserInputs => ({...prevUserInputs, [e.target.name]: e.target.value}));
         console.log(userInputs);
     });
-    // const handleCar = () => {
-    //     setHasCar(true);
-    // }
 
     const [selectedCarType, setSelectedCarType] = React.useState(new Set(["Car Type"]));
-    const selectedCarTypeValue = React.useMemo(
-        () => Array.from(selectedCarType).join(", "),
-        [selectedCarType]
-      );
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     console.log("CarInfo", carInfo);
-    // };
-    // const handleChangeCarInfoInput = (index, event: React.ChangeEvent<HTMLInputElement>) => {
-    //     const newCarInfo = carInfo.map(i => {
-    //         if(index == i.index) {
-    //           i[event.target.name] = event.target.value
-    //         }
-    //         return i;
-    //       })
-          
-    //       setCarInfo(newCarInfo);
-    const addCarInfo = () => {
-        let tempCarInfo = [...carInfo]
-        tempCarInfo.push({
-            carType: "",
-            milesDriven: "",
-            id: 1
-        })
-        setCarInfo(tempCarInfo)
-        // const values = [...carInfo];
-        // values[index][event.target.name] = event.target.value;
-        // setCarInfo(values);
-
-    }
+    const [carInfo, setCarInfo] = useState([{carType: "", milesDriven:""}]);
 
     const [selectedPubTransType, setSelectedPubTransType] = React.useState(new Set(["Public Transportation Type"]));
+    const [pubTransInfo, setPubTransInfo] = useState([{pubTransType: "", milesTraveled: ""}])
+    
     const selectedPubTransTypeValue = React.useMemo(
         () => Array.from(selectedPubTransType).join(", "),
         [selectedPubTransType]
       );
-    // const handleNumCars= (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const value = parseInt(e.target.value);
-    //     setNumCars(value);
-    //     console.log(value);
-    // }
+    
+    const [footprintCalculated, setFootprintCalculated] = useState(0);
+    const calculateEmissions = () => {
+        let vals: {key: string, value: number}[] = [];
+        let sum: number = 0;
+        Object.entries(userInputs).forEach(([key, value]) => {
+            vals.push({key: key, value: Number(value)});
+        });
+
+        for (let i = 0; i < vals.length; i++) {
+            if(vals[i].key == "waterVal") {
+                sum += (vals[i].value / 8.69049) * 0.18; // # gallons of water used in two months / # of weeks in two months (gallons of water used per week) * kg of co2 produced per gallon
+            } else if (vals[i].key == "gasVal") {
+                sum += (vals[i].value / 8.69049) * 8.887; // # gallons of gas used in two months / # of weeks in two months (gallons of water used per week) * kg of co2 produced per gallon 
+            } else if (vals[i].key == "electrictyVal") {
+                sum += (vals[i].value / 8.69049) * 0.417; // # kilowatt-hours of electricity used in two months / # of weeks in two months (kilowatt-hours of electricity used per week) * kg of co2 produced per kilowatt-hour 
+            } else if (vals[i].key == "grainsVal") {
+                sum += vals[i].value * (2.27 / 2.20462);
+            } else if (vals[i].key == "legumesVal") {
+                sum += vals[i].value * (1.9766666667 / 2.20462);
+            } else if (vals[i].key == "fruitVal") {
+                sum += vals[i].value * (1.05833333333 / 2.20462);
+            } else if (vals[i].key == "vegetablesVal") {
+                sum += vals[i].value * (0.625 / 2.20462);
+            } else if (vals[i].key == "nonDairyMilkVal") {
+                sum += vals[i].value * (0.6233333333 / 2.20462);
+            } else if (vals[i].key == "dairyVal") {
+                sum += vals[i].value * (13.515 / 2.20462);
+            } else if (vals[i].key == "eggsVal") {
+                sum += vals[i].value * (4.67 / 2.20462);
+            } else if (vals[i].key == "seafoodVal") {
+                sum += vals[i].value * (20.25 / 2.20462);
+            } else if (vals[i].key == "meatVal") {
+                sum += vals[i].value * (40.345 / 2.20462);
+            } else if (vals[i].key == "nutsVal") {
+                sum += vals[i].value * (1.83 / 2.20462);
+            } else if (vals[i].key == "sugarVal") {
+                sum += vals[i].value * (24.925 / 2.20462);
+            } else if (vals[i].key == "coffeeVal") {
+                sum += vals[i].value * (28.53 / 2.20462);
+            } else if (vals[i].key == "wasteVal") {
+                sum += vals[i].value * (3.5 / 2.20462);
+            } else if (vals[i].key == "clothingVal") {
+                sum += vals[i].value * (18.25 / 2.20462);
+            }
+        }
+        
+        setFootprintCalculated(sum);
+        console.log(sum);
+    }
+
 
     return (
         <>
@@ -81,21 +95,28 @@ export function CarbonFootprintCalculator() {
                         {carInfo.map((carInfo, index) => (
                             <div className="flex flex-row" key={index}>
                             <Dropdown>
-                                <DropdownTrigger>
-                                    <Button variant="bordered">{selectedCarTypeValue}</Button>
+                                <DropdownTrigger
+                                // value={userInputs.carInfo.carType} 
+                                // onChange={(e) => handleCarInfoChange(e, index)}
+                                >
+                                    <Button variant="bordered">{selectedCarType}</Button>
                                 </DropdownTrigger>
                                 <DropdownMenu
                                     disallowEmptySelection
                                     selectionMode="single"
-                                    selectedKeys={selectedCarType}
-                                    onSelectionChange={setSelectedCarType}
+                                    // selectedKeys={selectedCarType}
+                                    // onSelectionChange={setSelectedCarType}
+
                                 >
-                                    <DropdownItem key="Gasoline">Gasoline</DropdownItem>
-                                    <DropdownItem key="Hybrid">Hybrid</DropdownItem>
-                                    <DropdownItem key="Electric">Electric</DropdownItem>
+                                    <DropdownItem value="Gasoline"  key="Gasoline">Gasoline</DropdownItem>
+                                    <DropdownItem value="Hybrid" key="Hybrid">Hybrid</DropdownItem>
+                                    <DropdownItem value="Electric" key="Electric">Electric</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
-                            <Input placeholder="How many miles have you traveled using this form of public transportation this week?" value={carInfo.milesDriven} className="max-w-xl" />
+                            <Input 
+                                value={userInputs.carInfo.milesDriven} 
+                                // onChange={(e) => handleCarInfoChange(e, index)}
+                                placeholder="How many miles have you traveled using this form of public transportation this week?" value={carInfo.milesDriven} className="max-w-xl" />
                         </div>
                         ))}
                         <Button isIconOnly>
@@ -120,11 +141,12 @@ export function CarbonFootprintCalculator() {
                                     disallowEmptySelection
                                     selectionMode="single"
                                     selectedKeys={selectedPubTransType}
-                                    onSelectionChange={setSelectedPubTransType}
+                                    // onSelectionChange={setSelectedPubTransType}
                                 >
                                     <DropdownItem key="Bus">Bus</DropdownItem>
                                     <DropdownItem key="Train">Train</DropdownItem>
                                     <DropdownItem key="Metro/Subway System">Metro/Subway System</DropdownItem>
+                                    <DropdownItem key="Airplane">Airplane</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
                             <Input placeholder="How many miles have you traveled using this form of public transportation this week?" value={pubTransInfo.milesTraveled} className="max-w-xl" />
@@ -200,41 +222,12 @@ export function CarbonFootprintCalculator() {
                         <p>How many pounds of clothing products have you purchased this week?</p>
                         <Input placeholder="x pounds" name="clothingVal" id="clothingValId" onChange={setNewUserInputs} value={userInputs.clothingVal} />
 
-                        <Button>Submit</Button>
+                        <Button onClick={calculateEmissions}>Submit</Button>
                     </div>
-                    {/* {hasCar ? (
-                        
-
-                        // <div>
-                        //     <p>How many cars do you have?</p>
-                        //     <Input type="number" value={numCars?.toString()} onChange={handleNumCars} placeholder="x cars"></Input>
-                        //     {for(let i = 0; i < numCars; i++) {
-                                
-                        //     }}
-
-                        //         <p>Car #1</p>
-                        //         <div className="flex">
-                        //             <p>What type of car is it?</p>
-                        //             <Button>Gasoline</Button>
-                        //             <Button>Hybrid</Button>
-                        //             <Button>Electric</Button>
-                        //         </div>
-                        //         <p>How many gallons of gasoline did you fill in the tank of this car this week?</p>
-                        //             <Input placeholder="x cars"></Input>
-                        // </div>
-                    ):
-                        <div></div>
-                    }
-                    <div>
-                        <p>Have you used public transportation this week?</p>
-                        <Button onClick={handleCar}>Yes</Button>
-                        <Button>No</Button>
-                     </div> */}
-                    
+                    {footprintCalculated ! == 0 ? null : <h1>Your total Carbon Footprint for this week was: {footprintCalculated}</h1>}
                 </CardBody>
             </Card>
         </div>
         </>
-        // <h1>This is the carbon footprint calculator page</h1>
     )
 }

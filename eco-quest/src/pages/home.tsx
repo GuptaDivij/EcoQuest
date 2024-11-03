@@ -1,10 +1,10 @@
-import React from "react";
+import React from "react"; 
 
 export function Home() {
     
     return (
         <>
-            <h1 className="text-6xl">This is the home page</h1>
+            <h1 className="text-center text-xl py-4">EcoQuest</h1>
         </>
     )
 }
