@@ -3,28 +3,54 @@ import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/card";
 import {Input, Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@nextui-org/react";
 import PlusIcon from '../icons/plus-icon.tsx'
 import MinusIcon from '../icons/minus-icon.tsx'
+import { a } from "framer-motion/client";
 
 export function CarbonFootprintCalculator() {
 
-    const [userInputs, setUserInputs] = useState({waterVal: "", gasVal: "", electricityVal: "", carInfo: {carType: "", milesDriven: ""}, grainsVal: "", legumesVal: "", fruitVal: "", vegetablesVal: "", nonDairyMilkVal: "", dairyVal: "", eggsVal: "", seafoodVal: "", meatVal: "", nutsVal: "", sugarVal: "", coffeeVal: "", wasteVal: "", clothingVal: ""});
+    const [userInputs, setUserInputs] = useState({waterVal: "", gasVal: "", electricityVal: "", grainsVal: "", legumesVal: "", fruitVal: "", vegetablesVal: "", nonDairyMilkVal: "", dairyVal: "", eggsVal: "", seafoodVal: "", meatVal: "", nutsVal: "", sugarVal: "", coffeeVal: "", wasteVal: "", clothingVal: ""});
     const setNewUserInputs = ((e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
         setUserInputs(prevUserInputs => ({...prevUserInputs, [e.target.name]: e.target.value}));
         console.log(userInputs);
     });
 
-    const [selectedCarType, setSelectedCarType] = React.useState(new Set(["Car Type"]));
     const [carInfo, setCarInfo] = useState([{carType: "", milesDriven:""}]);
-
-    const [selectedPubTransType, setSelectedPubTransType] = React.useState(new Set(["Public Transportation Type"]));
     const [pubTransInfo, setPubTransInfo] = useState([{pubTransType: "", milesTraveled: ""}])
-    
-    const selectedPubTransTypeValue = React.useMemo(
-        () => Array.from(selectedPubTransType).join(", "),
-        [selectedPubTransType]
-      );
+
+    const handleAddCar = () => {
+        setCarInfo([...carInfo, {carType: "", milesDriven: ""}]);
+    }
+
+    const handleRemoveCar = (i) => {
+        let newCarInfo = [...carInfo];
+        newCarInfo.splice(i, 1);
+        setCarInfo(newCarInfo);
+    }
+
+    const handleCarInfoChange = (i, field, value) => {
+        let newCarInfo = [...carInfo];
+        newCarInfo[i][field] = value;
+        setCarInfo(newCarInfo);
+    }
+
+    const handleAddPubTrans = () => {
+        setPubTransInfo([...pubTransInfo, {pubTransType: "", milesTraveled: ""}]);
+    }
+
+    const handleRemovePubTrans = (i) => {
+        let newPubTransInfo = [...pubTransInfo];
+        newPubTransInfo.splice(i, 1);
+        setPubTransInfo(newPubTransInfo);
+    }
+
+    const handlePubTransInfoChange = (i, field, value) => {
+        let newPubTransInfo = [...pubTransInfo];
+        pubTransInfo[i][field] = value;
+        setPubTransInfo(newPubTransInfo);
+    }
     
     const [footprintCalculated, setFootprintCalculated] = useState(0);
+
     const calculateEmissions = () => {
         let vals: {key: string, value: number}[] = [];
         let sum: number = 0;
@@ -70,6 +96,37 @@ export function CarbonFootprintCalculator() {
             }
         }
         
+        for (let i = 0; i < carInfo.length; i++) {
+            switch (carInfo[i].carType) {
+                case "Gasoline":
+                    sum += (Number(carInfo[i].milesDriven) / 22.9) * 8.89 / 0.993;
+                    break;
+                case "Hybrid":
+                    sum += Number(carInfo[i].milesDriven) * 0.231;
+                    break;
+                case "Electric":
+                    sum += (Number(carInfo[i].milesDriven) / 3.60) * 857 / 1000;
+                    break;
+            }
+        }
+
+        for (let i = 0; i < pubTransInfo.length; i++) {
+            switch (pubTransInfo[i].pubTransType) {
+                case "Bus":
+                    sum += Number(pubTransInfo[i].milesTraveled) * 0.089;
+                    break;
+                case "Train":
+                    sum += Number(pubTransInfo[i].milesTraveled) * 0.041;
+                    break;
+                case "Metro/Subway System":
+                    sum += Number(pubTransInfo[i].milesTraveled) * 0.053;
+                    break;
+                case "Airplane":
+                    sum += Number(pubTransInfo[i].milesTraveled) * 0.125;
+                    break;
+            }
+        }
+
         setFootprintCalculated(sum);
         console.log(sum);
     }
@@ -81,83 +138,81 @@ export function CarbonFootprintCalculator() {
             <Card>
                 <CardBody>
                     <p>Provide the number of gallons of water consumed in your household from your latest water bill:</p>
-                    <Input name="waterVal" id="waterValId" placeholder="x gallons" className="max-w-xs" onChange={setNewUserInputs} value={userInputs.waterVal} />
+                    <Input name="waterVal" id="waterValId" placeholder="x gallons over past 2 months" className="max-w-xs" onChange={setNewUserInputs} value={userInputs.waterVal} />
                     
                     <p>Provide the number of gallons of gas consumed in your household from your latest gas bill:</p>
-                    <Input name="gasVal" id="gasValId" placeholder="x gallons" className="max-w-xs" onChange={setNewUserInputs} value={userInputs.gasVal} />
+                    <Input name="gasVal" id="gasValId" placeholder="x gallons over past 2 months" className="max-w-xs" onChange={setNewUserInputs} value={userInputs.gasVal} />
                     <p>Provide the number of kilowatt-hours of electricity consumed in your household from your latest electricity bill:</p>
-                    <Input name="electricityVal" id="electricityValId" placeholder="x kilowatt-hours" className="max-w-xs" onChange={setNewUserInputs} value={userInputs.electricityVal} />
+                    <Input name="electricityVal" id="electricityValId" placeholder="x kilowatt-hours over past 2 months" className="max-w-xs" onChange={setNewUserInputs} value={userInputs.electricityVal} />
+                    
                     <div className="flex flex-col">
                         <p>If you have used one or more cars this week, add them below: </p>
-                        {/* <Button onClick={handleCar}>Yes</Button>
-                        <Button>No</Button> */}
-                        <div className="flex flex-row">
-                        {carInfo.map((carInfo, index) => (
-                            <div className="flex flex-row" key={index}>
-                            <Dropdown>
-                                <DropdownTrigger
-                                // value={userInputs.carInfo.carType} 
-                                // onChange={(e) => handleCarInfoChange(e, index)}
-                                >
-                                    <Button variant="bordered">{selectedCarType}</Button>
-                                </DropdownTrigger>
-                                <DropdownMenu
-                                    disallowEmptySelection
-                                    selectionMode="single"
-                                    // selectedKeys={selectedCarType}
-                                    // onSelectionChange={setSelectedCarType}
+                        <div className="flex flex-col">
+                            {carInfo.map((carInfo, index) => (
+                                <div className="flex flex-row" key={index}>
+                                    <Dropdown>
+                                        <DropdownTrigger>
+                                            <Button variant="bordered">{carInfo.carType ? carInfo.carType : "Car Type"}</Button>
+                                        </DropdownTrigger>
+                                        <DropdownMenu
+                                            disallowEmptySelection
+                                            selectionMode="single"
+                                            onSelectionChange={(key) => handleCarInfoChange(index, "carType", Array.from(key)[0])}
+                                        >
+                                            <DropdownItem value="Gasoline"  key="Gasoline">Gasoline</DropdownItem>
+                                            <DropdownItem value="Hybrid" key="Hybrid">Hybrid</DropdownItem>
+                                            <DropdownItem value="Electric" key="Electric">Electric</DropdownItem>
+                                        </DropdownMenu>
+                                    </Dropdown>
+                                    <Input 
+                                        name="milesDriven"
+                                        value={carInfo.milesDriven} 
+                                        onChange={(e) => handleCarInfoChange(index, e.target.name, e.target.value)}
+                                        placeholder="How many miles have you traveled using this car this week?"
+                                        className="max-w-xl" />
+                                    <Button isIconOnly onClick={() => handleRemoveCar(index)}>
+                                    <MinusIcon />
+                                    </Button>
+                                </div>
+                            ))}
+                            <Button isIconOnly onClick={handleAddCar}>
+                                <PlusIcon />
+                            </Button>
+                        </div>
 
-                                >
-                                    <DropdownItem value="Gasoline"  key="Gasoline">Gasoline</DropdownItem>
-                                    <DropdownItem value="Hybrid" key="Hybrid">Hybrid</DropdownItem>
-                                    <DropdownItem value="Electric" key="Electric">Electric</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                            <Input 
-                                value={userInputs.carInfo.milesDriven} 
-                                // onChange={(e) => handleCarInfoChange(e, index)}
-                                placeholder="How many miles have you traveled using this form of public transportation this week?" value={carInfo.milesDriven} className="max-w-xl" />
-                        </div>
-                        ))}
-                        <Button isIconOnly>
-                            <PlusIcon />
-                        </Button>
-                        <Button isIconOnly>
-                            <MinusIcon />
-                        </Button>
-                        </div>
-                        
                         <p>If you have taken one or more forms of public transportation this week, add them below: </p>
-                        {/* <Button onClick={handleCar}>Yes</Button>
-                        <Button>No</Button> */}
-                        <div className="flex flex-row">
-                        {pubTransInfo.map((pubTransInfo, index) => (
-                            <div className="flex flex-row" key={index}>
-                            <Dropdown>
-                                <DropdownTrigger>
-                                    <Button variant="bordered">{selectedPubTransTypeValue}</Button>
-                                </DropdownTrigger>
-                                <DropdownMenu
-                                    disallowEmptySelection
-                                    selectionMode="single"
-                                    selectedKeys={selectedPubTransType}
-                                    // onSelectionChange={setSelectedPubTransType}
-                                >
-                                    <DropdownItem key="Bus">Bus</DropdownItem>
-                                    <DropdownItem key="Train">Train</DropdownItem>
-                                    <DropdownItem key="Metro/Subway System">Metro/Subway System</DropdownItem>
-                                    <DropdownItem key="Airplane">Airplane</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                            <Input placeholder="How many miles have you traveled using this form of public transportation this week?" value={pubTransInfo.milesTraveled} className="max-w-xl" />
-                        </div>
-                        ))}
-                        <Button isIconOnly>
-                            <PlusIcon />
-                        </Button>
-                        <Button isIconOnly>
-                            <MinusIcon />
-                        </Button>
+                        <div className="flex flex-col">
+                            {pubTransInfo.map((pubTransInfo, index) => (
+                                <div className="flex flex-row" key={index}>
+                                    <Dropdown>
+                                        <DropdownTrigger>
+                                            <Button variant="bordered">{pubTransInfo.pubTransType ? pubTransInfo.pubTransType : "Public Transport Type"}</Button>
+                                        </DropdownTrigger>
+                                        <DropdownMenu
+                                            disallowEmptySelection
+                                            selectionMode="single"
+                                            onSelectionChange={(key) => handlePubTransInfoChange(index, "pubTransType", Array.from(key)[0])}
+                                        >
+                                            <DropdownItem key="Bus">Bus</DropdownItem>
+                                            <DropdownItem key="Train">Train</DropdownItem>
+                                            <DropdownItem key="Metro/Subway System">Metro/Subway System</DropdownItem>
+                                            <DropdownItem key="Airplane">Airplane</DropdownItem>
+                                        </DropdownMenu>
+                                    </Dropdown>
+                                    <Input 
+                                        name="milesTraveled"
+                                        value={pubTransInfo.milesTraveled} 
+                                        onChange={(e) => handlePubTransInfoChange(index, e.target.name, e.target.value)}
+                                        placeholder="How many miles have you traveled using this form of public transportation this week?"
+                                        className="max-w-xl" />
+                                    <Button isIconOnly onClick={() => handleRemovePubTrans(index)}>
+                                    <MinusIcon />
+                                    </Button>
+                                </div>
+                            ))}
+                            <Button isIconOnly onClick={handleAddPubTrans}>
+                                <PlusIcon />
+                            </Button>
                         </div>
 
                         <p>Enter the quantities of each category of food that you have purchased this week:</p>
@@ -224,7 +279,7 @@ export function CarbonFootprintCalculator() {
 
                         <Button onClick={calculateEmissions}>Submit</Button>
                     </div>
-                    {footprintCalculated ! == 0 ? null : <h1>Your total Carbon Footprint for this week was: {footprintCalculated}</h1>}
+                    {footprintCalculated == 0 ? null : <h1>Your total Carbon Footprint for this week was: {footprintCalculated}</h1>}
                 </CardBody>
             </Card>
         </div>
