@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/card";
 import {Input, Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@nextui-org/react";
 import PlusIcon from '../icons/plus-icon.tsx'
@@ -129,7 +129,44 @@ export function CarbonFootprintCalculator() {
 
         setFootprintCalculated(sum);
         console.log(sum);
+
     }
+
+
+    useEffect(() => {
+        const handleSubmit = async () => {
+            // Grab footprint calculation
+            const footprint = {footprintCalculated};
+    
+            try {
+                const response = await fetch("http://localhost:5000/storefootprint", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(footprint)
+                });
+    
+                if (response.ok) {
+                    alert("Footprint logged successfully");
+                }
+                else {
+                    const errorData = await response.json();
+                    alert(errorData.message || "Footprint log failed");
+                }
+            
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Error logging footprint");
+            };
+    
+    
+        };
+        if (footprintCalculated !== 0) {
+            handleSubmit();
+        }
+    }, [footprintCalculated]);
+    
 
 
     return (

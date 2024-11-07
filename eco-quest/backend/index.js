@@ -64,6 +64,14 @@ app.post('/login', async (req, res) => {
         else {
             if (password == user.password) {
                 res.status(201).json({ message: 'User log in successful', userId: user._id })
+
+                // Create session
+                const userSessionsCollection = database.collection('usersessions');
+                const session = await userSessionsCollection.insertOne({ 
+                    username: user.username, 
+                    email: user.email 
+                });
+
             }
             else {
                 res.status(401).json({ message: "Incorrect password" });
@@ -76,8 +84,67 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// Store footprint calculation endpoint
+app.post('/storefootprint', async (req, res) => {
+    const { footprintCalculated } = req.body;
+
+    try {
+        const database = client.db('ecoquest');
+        const user = await database.collection('usersessions').findOne();
+        
+        const userFootprintsCollection = await database.collection('userfootprints');
+
+        const storeFootprint = await userFootprintsCollection.insertOne({
+            user: user.username,
+            footprint: footprintCalculated
+        });
+
+        res.status(201).json({ message: 'Footprint stored successfully' });
+    
+    
+    } catch (error) {
+        console.error('Error storing footprint data:', error);
+        res.status(500).json({ message: 'Failed to store footprint data' });
+    }
+
+});
+
+// Populate profile page
+app.post('/profile', async (req, res) => {
+
+    try {
+        const database = client.db('ecoquest');
+        const user = await database.collection('usersessions').findOne();
+        const footprintData = await database.collection('userfootprints').findOne( {user : user.username} )
+
+        if (user && footprintData) {
+            res.status(200).json({
+                message: "User and footprint info fetched successfully",
+                user: user.username,
+                footprint: footprintData.footprint
+            })
+        }
+        else if (user) {
+            res.status(200).json({
+                message: "User fetched successfully, no footprint info found",
+                user: user.username,
+                footprint: null
+            })
+        }
+
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+        res.status(500).json({ message: 'Failed to fetch user info' });
+    }
+
+});
+
 // Close server when app shuts down
 process.on('SIGINT', async () => {
+    // Terminate session
+    const database = client.db('ecoquest');
+    const session = await database.collection('usersession').deleteMany({});
+
     await client.close();
     console.log("MongoDB connection closed");
     process.exit(0);
