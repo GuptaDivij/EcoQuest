@@ -40,14 +40,7 @@ export function NavBar() {
         <NavbarItem>
           <Link to="/login">
             <Button variant="flat" color="secondary">
-              Login
-            </Button>
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link to="/signup">
-            <Button variant="flat" color="success">
-              Sign Up
+              Login and Signup
             </Button>
           </Link>
         </NavbarItem>
