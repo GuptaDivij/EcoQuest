@@ -6,8 +6,6 @@ export function Profile() {
     const [username, setUsername] = useState<string | null>(null);
     const [footprint, setFootprint] = useState<string | null>(null);
 
-
-
     const populatePage = async () => {
 
         // Connect to backend
@@ -27,30 +25,21 @@ export function Profile() {
                 setFootprint(data.footprint);
             }
 
-            
-
-
-
         } catch (error) {
             console.error("Error:", error);
-            alert("Error populating profile page");
+            // alert("Error populating profile page");
         };
-
-    
     }
 
     useEffect(() => {
         populatePage();
     }, []); 
 
-    
-
     return (
         <div>
-            {username === null ? null : <h1>Hello, {username}</h1>}
-            {footprint === null? <h1>Your most recent carbon footprint: No data found</h1> : <h1>Your most recent carbon footprint: {footprint}</h1>}
-        </div>
-        
-        
+            <h1>Hello, {username}</h1>
+            {/* {username === null ? null : <h1>Hello, {username}</h1>} */}
+            {footprint === null? <h1>You haven't recorded your carbon footprint this week!</h1> : <h1>This week's carbon footprint: {footprint}</h1>}
+        </div> 
     )
 }
