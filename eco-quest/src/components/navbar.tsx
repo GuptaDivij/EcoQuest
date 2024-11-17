@@ -15,7 +15,7 @@ export function NavBar() {
   return (
     <Navbar>
       <NavbarBrand>
-        <Logo />
+        <Logo/>
       </NavbarBrand>
       <NavbarContent className="sm:flex gap-4" justify="center">
         <NavbarItem>
