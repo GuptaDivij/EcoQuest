@@ -234,6 +234,11 @@ export function CarbonFootprintCalculator() {
         }
 
         const handleSubmit = async () => {
+            // Get timestamp for logging purposes
+            const date = new Date();
+            // Convert to PST
+            const pstDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
+
             // Grab footprint calculation
 
             const footprint = {footprintCalculated,
@@ -244,7 +249,8 @@ export function CarbonFootprintCalculator() {
                 sugarVal, coffeeVal, wasteVal, clothingVal,
                 gasolineCarVal, hybridCarVal, electricCarVal,
                 busPubTransVal, trainPubTransVal, 
-                metroPubTransVal, airplanePubTransVal
+                metroPubTransVal, airplanePubTransVal,
+                timestamp : pstDate
             };
 
             

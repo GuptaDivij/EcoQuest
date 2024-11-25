@@ -94,7 +94,7 @@ app.post('/storefootprint', async (req, res) => {
         sugarVal, coffeeVal, wasteVal, clothingVal,
         gasolineCarVal, hybridCarVal, electricCarVal,
         busPubTransVal, trainPubTransVal, 
-        metroPubTransVal, airplanePubTransVal } = req.body;
+        metroPubTransVal, airplanePubTransVal, timestamp } = req.body;
 
     try {
         const database = client.db('ecoquest');
@@ -128,7 +128,8 @@ app.post('/storefootprint', async (req, res) => {
             busUsage: busPubTransVal,
             trainUsage: trainPubTransVal,
             metroUsage: metroPubTransVal,
-            airplaneUsage: airplanePubTransVal
+            airplaneUsage: airplanePubTransVal,
+            timestamp: timestamp
         });
 
         res.status(201).json({ message: 'Footprint stored successfully' });
