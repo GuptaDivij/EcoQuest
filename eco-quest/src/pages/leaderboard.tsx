@@ -15,7 +15,7 @@ export function Leaderboard() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await fetch("http://localhost:5001/leaderboard");
+        const response = await fetch("http://localhost:5000/leaderboard");
         const data = await response.json();
         setLeaderboard(data); // TypeScript now knows the shape of `data`
       } catch (error) {

@@ -12,7 +12,7 @@ export function Profile() {
 
         // Connect to backend
         try {
-            const response = await fetch("http://localhost:5001/profile", {
+            const response = await fetch("http://localhost:5000/profile", {
                 method:'POST',
                 headers: {
                     'Content-Type': 'application/json',
