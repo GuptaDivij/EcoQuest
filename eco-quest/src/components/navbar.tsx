@@ -8,19 +8,16 @@ import {
   Button,
 } from "@nextui-org/react";
 import { Link } from "react-router-dom";
+import Logo from '../icons/logo.tsx'
+import './navbar.css'
 
 export function NavBar() {
   return (
     <Navbar>
       <NavbarBrand>
-        <p className="font-bold text-inherit text-xl font-serif text-primary">EcoQuest</p>
+        <Logo/>
       </NavbarBrand>
       <NavbarContent className="sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link to="/">
-            <button>Home</button>
-          </Link>
-        </NavbarItem>
         <NavbarItem>
           <Link to="/profile">Profile</Link>
         </NavbarItem>
@@ -30,24 +27,17 @@ export function NavBar() {
         <NavbarItem>
           <Button
             as={Link}
-            color="primary"
             to="/carbon-footprint-calculator"
             variant="flat"
+            className="footprint-button"
           >
             Track Your Carbon Impact!
           </Button>
         </NavbarItem>
         <NavbarItem>
           <Link to="/login">
-            <Button variant="flat" color="secondary">
-              Login
-            </Button>
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link to="/signup">
-            <Button variant="flat" color="success">
-              Sign Up
+            <Button variant="flat" className="login-button">
+              Login / Signup
             </Button>
           </Link>
         </NavbarItem>

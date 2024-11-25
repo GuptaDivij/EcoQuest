@@ -1,0 +1,11 @@
+.footprint-button {
+    background-color: #426B1F;
+    color: white;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.login-button {
+    background-color: #5f972e;
+    color: white;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+} 
