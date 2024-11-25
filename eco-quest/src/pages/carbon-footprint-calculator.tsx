@@ -241,7 +241,7 @@ export function CarbonFootprintCalculator() {
 
             // Grab footprint calculation
 
-            const footprint = {footprintCalculated,
+            const footprint = {timestamp : pstDate, footprintCalculated,
                 waterVal, gasVal, electricityVal,
                 grainsVal, legumesVal, fruitVal,
                 vegetablesVal, nonDairyMilkVal, dairyVal,
@@ -250,7 +250,6 @@ export function CarbonFootprintCalculator() {
                 gasolineCarVal, hybridCarVal, electricCarVal,
                 busPubTransVal, trainPubTransVal, 
                 metroPubTransVal, airplanePubTransVal,
-                timestamp : pstDate
             };
 
             
