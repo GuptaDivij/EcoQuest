@@ -26,11 +26,30 @@ run().catch(console.dir);
 const express = require('express');
 // CORS to communicate between port 3000 and port 5000
 const cors = require('cors');
+// Session
+const session = require('express-session');
 
 const app = express();
-app.use(cors());
+
+// Configure CORS
+const corsConfig = {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    credentials: true,
+};
+app.use(cors(corsConfig));
 
 app.use(express.json());
+
+app.use(session({
+    secret :'###',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { 
+        secure:false,
+        httpOnly:false, },
+}))
+
 
 // Signup endpoint
 app.post('/signup', async (req, res) => {
@@ -42,7 +61,7 @@ app.post('/signup', async (req, res) => {
 
         const result = await usersCollection.insertOne({ username, email, password });
 
-        res.status(201).json({ message: 'User sign up successful', userId: result.insertedId })
+        res.status(201).json({ message: 'User sign up successful', userId: result.insertedId });
         console.log('User sign up successful');
     } catch (error) {
         console.error('Error saving user:', error);
@@ -63,15 +82,13 @@ app.post('/login', async (req, res) => {
         }
         else {
             if (password == user.password) {
-                res.status(201).json({ message: 'User log in successful', userId: user._id })
+                // Create session for user
+                req.session.user = { username: user.username, email: user.email };
+                console.log('Session:', req.session.user);
 
-                // Create session
-                const userSessionsCollection = database.collection('usersessions');
-                const clearSession = await userSessionsCollection.deleteOne({});
-                const session = await userSessionsCollection.insertOne({ 
-                    username: user.username, 
-                    email: user.email 
-                });
+                res.status(201).json({ message: 'User log in successful', userId: user._id });
+
+                console.log('User logged in successfully');
 
             }
             else {
@@ -98,7 +115,7 @@ app.post('/storefootprint', async (req, res) => {
 
     try {
         const database = client.db('ecoquest');
-        const user = await database.collection('usersessions').findOne();
+        const user = req.session.user;
         
         const userFootprintsCollection = await database.collection('userfootprints');
 
@@ -147,7 +164,8 @@ app.post('/profile', async (req, res) => {
 
     try {
         const database = client.db('ecoquest');
-        const user = await database.collection('usersessions').findOne();
+        const user = req.session.user;
+        console.log('Session:', user);
         const footprintData = await database.collection('userfootprints').findOne( {user : user.username} )
 
         if (user && footprintData) {
@@ -190,16 +208,6 @@ app.get("/leaderboard", async (req, res) => {
     }
   });
 
-// Close server when app shuts down
-process.on('SIGINT', async () => {
-    // Terminate session
-    const database = client.db('ecoquest');
-    const session = await database.collection('usersession').deleteMany({});
-
-    await client.close();
-    console.log("MongoDB connection closed");
-    process.exit(0);
-})
 
 // Server start
 app.listen(5000, () => {

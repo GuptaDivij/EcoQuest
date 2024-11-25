@@ -260,6 +260,7 @@ export function CarbonFootprintCalculator() {
                     headers: {
                         "Content-Type": "application/json"
                     },
+                    credentials: "include",
                     body: JSON.stringify(footprint)
                 });
     

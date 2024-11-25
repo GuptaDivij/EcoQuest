@@ -16,7 +16,8 @@ export function Profile() {
                 method:'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                }
+                },
+                credentials: 'include',
             });
 
             if (!response.ok) {
