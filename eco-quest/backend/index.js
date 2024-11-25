@@ -172,6 +172,24 @@ app.post('/profile', async (req, res) => {
 
 });
 
+// Leaderboard endpoint
+app.get("/leaderboard", async (req, res) => {
+    try {
+      const database = client.db("ecoquest");
+      const userFootprintsCollection = database.collection("userfootprints");
+      // Fetch and sort by footprint in descending order
+      const leaderboard = await userFootprintsCollection
+        .find()
+        .sort({ footprint: 1 })
+        .limit(10)
+        .toArray();
+      res.status(200).json(leaderboard);
+    } catch (error) {
+      console.error("Error fetching leaderboard:", error);
+      res.status(500).json({ message: "Failed to fetch leaderboard data" });
+    }
+  });
+
 // Close server when app shuts down
 process.on('SIGINT', async () => {
     // Terminate session
