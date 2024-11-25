@@ -87,14 +87,14 @@ app.post('/login', async (req, res) => {
 
 // Store footprint calculation endpoint
 app.post('/storefootprint', async (req, res) => {
-    const { footprintCalculated, waterVal, gasVal, electricityVal,
+    const { timestamp, footprintCalculated, waterVal, gasVal, electricityVal,
         grainsVal, legumesVal, fruitVal,
         vegetablesVal, nonDairyMilkVal, dairyVal,
         eggsVal, seafoodVal, meatVal, nutsVal,
         sugarVal, coffeeVal, wasteVal, clothingVal,
         gasolineCarVal, hybridCarVal, electricCarVal,
         busPubTransVal, trainPubTransVal, 
-        metroPubTransVal, airplanePubTransVal, timestamp } = req.body;
+        metroPubTransVal, airplanePubTransVal} = req.body;
 
     try {
         const database = client.db('ecoquest');
@@ -104,6 +104,7 @@ app.post('/storefootprint', async (req, res) => {
 
         const storeFootprint = await userFootprintsCollection.insertOne({
             user: user.username,
+            timestamp: timestamp,
             footprint: footprintCalculated,
             waterUsage: waterVal,
             gasUsage: gasVal,
@@ -129,7 +130,6 @@ app.post('/storefootprint', async (req, res) => {
             trainUsage: trainPubTransVal,
             metroUsage: metroPubTransVal,
             airplaneUsage: airplanePubTransVal,
-            timestamp: timestamp
         });
 
         res.status(201).json({ message: 'Footprint stored successfully' });
