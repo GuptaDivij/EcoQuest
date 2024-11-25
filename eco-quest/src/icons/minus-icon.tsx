@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function MinusIcon(): JSX.Element {
     return (
-        <svg width="30" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 24H38" stroke="#1E1E1E" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
 

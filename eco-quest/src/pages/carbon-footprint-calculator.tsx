@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from "react";
 import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/card";
 import {Input, Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@nextui-org/react";
+import PlusIcon from '../icons/plus-icon.tsx'
 import MinusIcon from '../icons/minus-icon.tsx'
-import './carbon-footprint-calculator.css'
+import { a } from "framer-motion/client";
 
 export function CarbonFootprintCalculator() {
 
@@ -171,15 +172,15 @@ export function CarbonFootprintCalculator() {
     return (
         <>
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
-            <Card className="calculator-form">
-                <CardBody className="form-body">
+            <Card>
+                <CardBody>
                     <p>Provide the number of gallons of water consumed in your household from your latest water bill:</p>
-                    <Input name="waterVal" id="waterValId" placeholder="x gallons over past 2 months" className="max-w-3xl input" variant="bordered" onChange={setNewUserInputs} value={userInputs.waterVal} />
+                    <Input name="waterVal" id="waterValId" placeholder="x gallons over past 2 months" className="max-w-xs" onChange={setNewUserInputs} value={userInputs.waterVal} />
                     
                     <p>Provide the number of gallons of gas consumed in your household from your latest gas bill:</p>
-                    <Input name="gasVal" id="gasValId" variant="bordered" placeholder="x gallons over past 2 months" className="max-w-3xl input" onChange={setNewUserInputs} value={userInputs.gasVal} />
+                    <Input name="gasVal" id="gasValId" placeholder="x gallons over past 2 months" className="max-w-xs" onChange={setNewUserInputs} value={userInputs.gasVal} />
                     <p>Provide the number of kilowatt-hours of electricity consumed in your household from your latest electricity bill:</p>
-                    <Input name="electricityVal" id="electricityValId" variant="bordered" placeholder="x kilowatt-hours over past 2 months" className="max-w-3xl input" onChange={setNewUserInputs} value={userInputs.electricityVal} />
+                    <Input name="electricityVal" id="electricityValId" placeholder="x kilowatt-hours over past 2 months" className="max-w-xs" onChange={setNewUserInputs} value={userInputs.electricityVal} />
                     
                     <div className="flex flex-col">
                         <p>If you have used one or more cars this week, add them below: </p>
@@ -188,7 +189,7 @@ export function CarbonFootprintCalculator() {
                                 <div className="flex flex-row" key={index}>
                                     <Dropdown>
                                         <DropdownTrigger>
-                                            <Button className="type-button">{carInfo.carType ? carInfo.carType : "Car Type"}</Button>
+                                            <Button variant="bordered">{carInfo.carType ? carInfo.carType : "Car Type"}</Button>
                                         </DropdownTrigger>
                                         <DropdownMenu
                                             disallowEmptySelection
@@ -205,14 +206,15 @@ export function CarbonFootprintCalculator() {
                                         value={carInfo.milesDriven} 
                                         onChange={(e) => handleCarInfoChange(index, e.target.name, e.target.value)}
                                         placeholder="How many miles have you traveled using this car this week?"
-                                        className="max-w-xl input" 
-                                        variant="bordered"/>
-                                    <Button isIconOnly className="minus-button" onClick={() => handleRemoveCar(index)}>
+                                        className="max-w-xl" />
+                                    <Button isIconOnly onClick={() => handleRemoveCar(index)}>
                                     <MinusIcon />
                                     </Button>
                                 </div>
                             ))}
-                            <Button className="add-car-button" onClick={handleAddCar}>Add Another Car</Button>
+                            <Button isIconOnly onClick={handleAddCar}>
+                                <PlusIcon />
+                            </Button>
                         </div>
 
                         <p>If you have taken one or more forms of public transportation this week, add them below: </p>
@@ -221,7 +223,7 @@ export function CarbonFootprintCalculator() {
                                 <div className="flex flex-row" key={index}>
                                     <Dropdown>
                                         <DropdownTrigger>
-                                            <Button className="type-button">{pubTransInfo.pubTransType ? pubTransInfo.pubTransType : "Public Transport Type"}</Button>
+                                            <Button variant="bordered">{pubTransInfo.pubTransType ? pubTransInfo.pubTransType : "Public Transport Type"}</Button>
                                         </DropdownTrigger>
                                         <DropdownMenu
                                             disallowEmptySelection
@@ -239,81 +241,82 @@ export function CarbonFootprintCalculator() {
                                         value={pubTransInfo.milesTraveled} 
                                         onChange={(e) => handlePubTransInfoChange(index, e.target.name, e.target.value)}
                                         placeholder="How many miles have you traveled using this form of public transportation this week?"
-                                        className="max-w-xl input"
-                                        variant="bordered" />
-                                    <Button className="minus-button" isIconOnly onClick={() => handleRemovePubTrans(index)}>
+                                        className="max-w-xl" />
+                                    <Button isIconOnly onClick={() => handleRemovePubTrans(index)}>
                                     <MinusIcon />
                                     </Button>
                                 </div>
                             ))}
-                            <Button className="add-transportation-button" onClick={handleAddPubTrans}>Add Another Form of Public Transportation</Button>
+                            <Button isIconOnly onClick={handleAddPubTrans}>
+                                <PlusIcon />
+                            </Button>
                         </div>
 
                         <p>Enter the quantities of each category of food that you have purchased this week:</p>
                         <div className="flex flex-row">
                             <div className="flex flex-col">
-                                <p className="food-type-name">Grains</p>
-                                <Input className="food-type-input" variant="bordered" placeholder="x kilograms" name="grainsVal" id="grainsValId" onChange={setNewUserInputs} value={userInputs.grainsVal} />
+                                <p>Grains</p>
+                                <Input placeholder="x kilograms" name="grainsVal" id="grainsValId" onChange={setNewUserInputs} value={userInputs.grainsVal} />
                             </div>
                             <div className="flex flex-col">
-                                <p className="food-type-name">Legumes</p>
-                                <Input className="food-type-input" variant="bordered" placeholder="x kilograms" name="legumesVal" id="legumesValId" onChange={setNewUserInputs} value={userInputs.legumesVal} />
+                                <p>Legumes</p>
+                                <Input placeholder="x kilograms" name="legumesVal" id="legumesValId" onChange={setNewUserInputs} value={userInputs.legumesVal} />
                             </div>
                             <div className="flex flex-col">
-                                <p className="food-type-name">Fruit</p>
-                                <Input className="food-type-input" variant="bordered" placeholder="x kilograms" name="fruitVal" id="fruitValId" onChange={setNewUserInputs} value={userInputs.fruitVal} />
+                                <p>Fruit</p>
+                                <Input placeholder="x kilograms" name="fruitVal" id="fruitValId" onChange={setNewUserInputs} value={userInputs.fruitVal} />
                             </div>
                             <div className="flex flex-col">
-                                <p className="food-type-name">Vegetables</p>
-                                <Input className="food-type-input" variant="bordered" placeholder="x kilograms" name="vegetablesVal" id="vegetablesValId" onChange={setNewUserInputs} value={userInputs.vegetablesVal} />
+                                <p>Vegetables</p>
+                                <Input placeholder="x kilograms" name="vegetablesVal" id="vegetablesValId" onChange={setNewUserInputs} value={userInputs.vegetablesVal} />
                             </div>
                         </div>
                         <div className="flex flex-row">
                             <div className="flex flex-col">
-                                <p className="food-type-name">Non-Dairy Milk</p>
-                                <Input className="food-type-input" variant="bordered" placeholder="x kilograms" name="nonDairyMilkVal" id="nonDairyMilkValId" onChange={setNewUserInputs} value={userInputs.nonDairyMilkVal} />
+                                <p>Non-Dairy Milk</p>
+                                <Input placeholder="x kilograms" name="nonDairyMilkVal" id="nonDairyMilkValId" onChange={setNewUserInputs} value={userInputs.nonDairyMilkVal} />
                             </div>
                             <div className="flex flex-col">
-                                <p className="food-type-name">Dairy Products</p>
-                                <Input className="food-type-input" variant="bordered" placeholder="x kilograms" name="dairyVal" id="dairyValId" onChange={setNewUserInputs} value={userInputs.dairyVal} />
+                                <p>Dairy Products</p>
+                                <Input placeholder="x kilograms" name="dairyVal" id="dairyValId" onChange={setNewUserInputs} value={userInputs.dairyVal} />
                             </div>
                             <div className="flex flex-col">
-                                <p className="food-type-name">Eggs</p>
-                                <Input className="food-type-input" variant="bordered" placeholder="x kilograms" name="eggsVal" id="eggsValId" onChange={setNewUserInputs} value={userInputs.eggsVal} />
+                                <p>Eggs</p>
+                                <Input placeholder="x kilograms" name="eggsVal" id="eggsValId" onChange={setNewUserInputs} value={userInputs.eggsVal} />
                             </div>
                             <div className="flex flex-col">
-                                <p className="food-type-name">Fish & Seafood</p>
-                                <Input className="food-type-input" variant="bordered" placeholder="x kilograms" name="seafoodVal" id="seafoodValId" onChange={setNewUserInputs} value={userInputs.seafoodVal} />
+                                <p>Fish & Seafood</p>
+                                <Input placeholder="x kilograms" name="seafoodVal" id="seafoodValId" onChange={setNewUserInputs} value={userInputs.seafoodVal} />
                             </div>
                         </div>
                         <div className="flex flex-row">
                             <div className="flex flex-col">
-                                <p className="food-type-name">Meat Products</p>
-                                <Input className="food-type-input" variant="bordered" placeholder="x kilograms" name="meatVal" id="meatValId" onChange={setNewUserInputs} value={userInputs.meatVal} />
+                                <p>Meat Products</p>
+                                <Input placeholder="x kilograms" name="meatVal" id="meatValId" onChange={setNewUserInputs} value={userInputs.meatVal} />
                             </div>
                             <div className="flex flex-col">
-                                <p className="food-type-name">Nuts</p>
-                                <Input className="food-type-input" variant="bordered" placeholder="x kilograms" name="nutsVal" id="nutsValId" onChange={setNewUserInputs} value={userInputs.nutsVal} />
+                                <p>Nuts</p>
+                                <Input placeholder="x kilograms" name="nutsVal" id="nutsValId" onChange={setNewUserInputs} value={userInputs.nutsVal} />
                             </div>
                             <div className="flex flex-col">
-                                <p className="food-type-name">Sugar & Chocolate</p>
-                                <Input className="food-type-input" variant="bordered" placeholder="x kilograms" name="sugarVal" id="sugarValId" onChange={setNewUserInputs} value={userInputs.sugarVal} />
+                                <p>Sugar & Chocolate</p>
+                                <Input placeholder="x kilograms" name="sugarVal" id="sugarValId" onChange={setNewUserInputs} value={userInputs.sugarVal} />
                             </div>
                             <div className="flex flex-col">
-                                <p className="food-type-name">Coffee</p>
-                                <Input className="food-type-input" variant="bordered" placeholder="x kilograms" name="coffeeVal" id="coffeeValId" onChange={setNewUserInputs} value={userInputs.coffeeVal} />
+                                <p>Coffee</p>
+                                <Input placeholder="x kilograms" name="coffeeVal" id="coffeeValId" onChange={setNewUserInputs} value={userInputs.coffeeVal} />
                             </div>
                         </div>
 
-                        <p className="text">How many pounds of landfill waste have you generated this week (not including recycled or composed trash)?</p>
-                        <Input className="max-w-3xl" variant="bordered" placeholder="x pounds" name="wasteVal" id="wasteValId" onChange={setNewUserInputs} value={userInputs.wasteVal} />
+                        <p>How many pounds of landfill waste have you generated this week (not including recycled or composed trash)?</p>
+                        <Input placeholder="x pounds" name="wasteVal" id="wasteValId" onChange={setNewUserInputs} value={userInputs.wasteVal} />
 
-                        <p className="text">How many pounds of clothing products have you purchased this week?</p>
-                        <Input className="max-w-3xl" variant="bordered" placeholder="x pounds" name="clothingVal" id="clothingValId" onChange={setNewUserInputs} value={userInputs.clothingVal} />
+                        <p>How many pounds of clothing products have you purchased this week?</p>
+                        <Input placeholder="x pounds" name="clothingVal" id="clothingValId" onChange={setNewUserInputs} value={userInputs.clothingVal} />
 
-                        <Button className="submit-button"onClick={calculateEmissions}>Submit</Button>
+                        <Button onClick={calculateEmissions}>Submit</Button>
                     </div>
-                    {footprintCalculated == 0 ? null : <h1 className="result-text">This Week's Carbon Footprint: {footprintCalculated}</h1>}
+                    {footprintCalculated == 0 ? null : <h1>Your total Carbon Footprint for this week was: {footprintCalculated}</h1>}
                 </CardBody>
             </Card>
         </div>
