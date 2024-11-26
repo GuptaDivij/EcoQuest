@@ -166,13 +166,16 @@ app.post('/profile', async (req, res) => {
         const database = client.db('ecoquest');
         const user = req.session.user;
         console.log('Session:', user);
-        const footprintData = await database.collection('userfootprints').findOne( {user : user.username} )
+        const footprintData = await database.collection('userfootprints').find( {user : user.username} ).sort({ timestamp: -1 }).limit(1).toArray();
+        const allFootprintData = await database.collection('userfootprints').find( {user : user.username} ).sort({ timestamp: -1 }).toArray();
 
         if (user && footprintData) {
+            console.log(allFootprintData)
             res.status(200).json({
                 message: "User and footprint info fetched successfully",
                 user: user.username,
-                footprint: footprintData.footprint
+                footprint: footprintData[0].footprint,
+                allFootprintData: allFootprintData
             })
         }
         else if (user) {
