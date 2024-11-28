@@ -133,10 +133,126 @@ export function CarbonFootprintCalculator() {
 
 
     useEffect(() => {
-        const handleSubmit = async () => {
-            // Grab footprint calculation
-            const footprint = {footprintCalculated};
+        let waterVal: number = 0;
+        let gasVal: number = 0;
+        let electricityVal: number = 0;
+        let grainsVal: number = 0;
+        let legumesVal: number = 0;
+        let fruitVal: number = 0;
+        let vegetablesVal: number = 0;
+        let nonDairyMilkVal: number = 0;
+        let dairyVal: number = 0;
+        let eggsVal: number = 0;
+        let seafoodVal: number = 0;
+        let meatVal: number = 0;
+        let nutsVal: number = 0;
+        let sugarVal: number = 0;
+        let coffeeVal: number = 0;
+        let wasteVal: number = 0;
+        let clothingVal: number = 0;
+        let gasolineCarVal: number = 0;
+        let hybridCarVal: number = 0;
+        let electricCarVal: number = 0;
+        let busPubTransVal: number = 0;
+        let trainPubTransVal: number = 0;
+        let metroPubTransVal: number = 0;
+        let airplanePubTransVal: number = 0;
 
+        // Get individual user values
+        let vals: {key: string, value: number}[] = [];
+        Object.entries(userInputs).forEach(([key, value]) => {
+            vals.push({key: key, value: Number(value)});
+        });
+        for (let i = 0; i < vals.length; i++) {
+            if(vals[i].key == "waterVal") {
+                waterVal += (vals[i].value / 8.69049) * 0.18; // # gallons of water used in two months / # of weeks in two months (gallons of water used per week) * kg of co2 produced per gallon
+            } else if (vals[i].key == "gasVal") {
+                gasVal += (vals[i].value / 8.69049) * 8.887; // # gallons of gas used in two months / # of weeks in two months (gallons of water used per week) * kg of co2 produced per gallon 
+            } else if (vals[i].key == "electrictyVal") {
+                electricityVal += (vals[i].value / 8.69049) * 0.417; // # kilowatt-hours of electricity used in two months / # of weeks in two months (kilowatt-hours of electricity used per week) * kg of co2 produced per kilowatt-hour 
+            } else if (vals[i].key == "grainsVal") {
+                grainsVal += vals[i].value * (2.27 / 2.20462);
+            } else if (vals[i].key == "legumesVal") {
+                legumesVal += vals[i].value * (1.9766666667 / 2.20462);
+            } else if (vals[i].key == "fruitVal") {
+                fruitVal += vals[i].value * (1.05833333333 / 2.20462);
+            } else if (vals[i].key == "vegetablesVal") {
+                vegetablesVal += vals[i].value * (0.625 / 2.20462);
+            } else if (vals[i].key == "nonDairyMilkVal") {
+                nonDairyMilkVal += vals[i].value * (0.6233333333 / 2.20462);
+            } else if (vals[i].key == "dairyVal") {
+                dairyVal += vals[i].value * (13.515 / 2.20462);
+            } else if (vals[i].key == "eggsVal") {
+                eggsVal += vals[i].value * (4.67 / 2.20462);
+            } else if (vals[i].key == "seafoodVal") {
+                seafoodVal += vals[i].value * (20.25 / 2.20462);
+            } else if (vals[i].key == "meatVal") {
+                meatVal += vals[i].value * (40.345 / 2.20462);
+            } else if (vals[i].key == "nutsVal") {
+                nutsVal += vals[i].value * (1.83 / 2.20462);
+            } else if (vals[i].key == "sugarVal") {
+                sugarVal += vals[i].value * (24.925 / 2.20462);
+            } else if (vals[i].key == "coffeeVal") {
+                coffeeVal += vals[i].value * (28.53 / 2.20462);
+            } else if (vals[i].key == "wasteVal") {
+                wasteVal += vals[i].value * (3.5 / 2.20462);
+            } else if (vals[i].key == "clothingVal") {
+                clothingVal += vals[i].value * (18.25 / 2.20462);
+            }
+        }
+
+        for (let i = 0; i < carInfo.length; i++) {
+            switch (carInfo[i].carType) {
+                case "Gasoline":
+                    gasolineCarVal += (Number(carInfo[i].milesDriven) / 22.9) * 8.89 / 0.993;
+                    break;
+                case "Hybrid":
+                    hybridCarVal += Number(carInfo[i].milesDriven) * 0.231;
+                    break;
+                case "Electric":
+                    electricCarVal += (Number(carInfo[i].milesDriven) / 3.60) * 857 / 1000;
+                    break;
+            }
+        }
+
+        for (let i = 0; i < pubTransInfo.length; i++) {
+            switch (pubTransInfo[i].pubTransType) {
+                case "Bus":
+                    busPubTransVal += Number(pubTransInfo[i].milesTraveled) * 0.089;
+                    break;
+                case "Train":
+                    trainPubTransVal += Number(pubTransInfo[i].milesTraveled) * 0.041;
+                    break;
+                case "Metro/Subway System":
+                    metroPubTransVal += Number(pubTransInfo[i].milesTraveled) * 0.053;
+                    break;
+                case "Airplane":
+                    airplanePubTransVal += Number(pubTransInfo[i].milesTraveled) * 0.125;
+                    break;
+            }
+        }
+
+        const handleSubmit = async () => {
+            // Get timestamp for logging purposes
+            const date = new Date();
+            // Convert to PST
+            const pstDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
+
+            // Grab footprint calculation
+
+            const footprint = {timestamp : pstDate, footprintCalculated,
+                waterVal, gasVal, electricityVal,
+                grainsVal, legumesVal, fruitVal,
+                vegetablesVal, nonDairyMilkVal, dairyVal,
+                eggsVal, seafoodVal, meatVal, nutsVal,
+                sugarVal, coffeeVal, wasteVal, clothingVal,
+                gasolineCarVal, hybridCarVal, electricCarVal,
+                busPubTransVal, trainPubTransVal, 
+                metroPubTransVal, airplanePubTransVal,
+            };
+
+            
+    
             try {
                 const response = await fetch("http://localhost:5000/storefootprint", {
                     method: "POST",
@@ -146,7 +262,7 @@ export function CarbonFootprintCalculator() {
                     credentials: "include",
                     body: JSON.stringify(footprint)
                 });
-
+    
                 if (response.ok) {
                     alert("Footprint logged successfully");
                 }
@@ -154,15 +270,25 @@ export function CarbonFootprintCalculator() {
                     const errorData = await response.json();
                     alert(errorData.message || "Footprint log failed");
                 }
-
+            
             } catch (error) {
                 console.error("Error:", error);
                 alert("Error logging footprint");
             };
-
-
+    
+    
         };
-        if (footprintCalculated !== 0) {
+        if (footprintCalculated !== 0 && (
+            waterVal !== 0 || gasVal !== 0 || electricityVal !== 0 ||
+            gasVal !== 0 || electricityVal !== 0 || grainsVal !== 0 ||
+            legumesVal !== 0 || fruitVal !== 0 || vegetablesVal !== 0 ||
+            nonDairyMilkVal !== 0 || dairyVal !== 0 || eggsVal !== 0 ||
+            seafoodVal !== 0 || meatVal !== 0 || nutsVal !== 0 || sugarVal !== 0 ||
+            coffeeVal !== 0 || wasteVal !== 0 || clothingVal !== 0 || clothingVal !== 0 ||
+            gasolineCarVal !== 0 || hybridCarVal !== 0 || electricCarVal !== 0 ||
+            busPubTransVal !== 0 || trainPubTransVal !== 0 || metroPubTransVal !== 0 ||
+            airplanePubTransVal !== 0
+        )) {
             handleSubmit();
         }
     }, [footprintCalculated]);
