@@ -41,14 +41,22 @@ export function Profile() {
     const [landfillIsClicked, setLandfillIsClicked] = useState(false);
     const [clothingIsClicked, setClothingIsClicked] = useState(false);
 
-    const combinedArr: any[] = [["Carbon Footprint", "Timestamp"]];
+    const combinedArr = [
+        [new Date("2024-11-28T10:54:46.979Z"), 1.228939185215128],
+        [new Date("2024-11-28T10:53:20.485Z"), 0.4620709334009983],
+        [new Date("2024-11-28T10:52:13.121Z"), 0.8193604742544739],
+        [new Date("2024-11-28T10:51:37.193Z"), 0.8193604742544739]
+    ];
+    // const combinedArr: any[] = [];
+    // let uniqueArr: any[] = [];
+    const columns = [{label: 'Timestamp', type: 'datetime'}, {label: 'Carbon Footprint', type: 'number'}];
     const chartOptions = {
         hAxis: {
-          title: 'Carbon Footprint',
+            title: 'Timestamp',
+            format: 'yyyy-MM-dd HH:mm:ss',
         },
         vAxis: {
-          title: 'Timestamp',
-          format: 'yyyy-MM-dd HH:mm:ss',
+          title: 'Carbon Footprint',
         },
         legend: { position: 'none' },
         pointSize: 5,
@@ -70,7 +78,7 @@ export function Profile() {
                 alert('Error fetching user info');
             } else {
                 const data = await response.json();
-                console.log("DATA: ", data);
+                // console.log("DATA: ", data);
                 setUsername(data.user);
                 setFootprint(data.footprint);
                 setWaterUsageUser(data.allFootprintData[0].waterUsage);
@@ -81,19 +89,23 @@ export function Profile() {
                 setLandfillGenerationUser(data.allFootprintData[0].wasteProduction);
                 setClothingPurchasedUser(data.allFootprintData[0].clothingPurchased);
 
-                for (let i = 0; i < data.allFootprintData.length; i++) {
-                    combinedArr.push([data.allFootprintData[i].footprint, new Date(data.allFootprintData[i].timestamp)]);
-                }
+                // for (let i = 0; i < data.allFootprintData.length; i++) {
+                //     combinedArr.push([new Date((data.allFootprintData[i].timestamp).toString()), Number(data.allFootprintData[i].footprint)]);
+                // }
             }
+            // const uniqueSet = new Set(
+            //     combinedArr.map(item => JSON.stringify(item)) // Convert each object to a string
+            //   );
+            // uniqueArr = Array.from(uniqueSet).map(item => JSON.parse(item));
 
         } catch (error) {
             console.error("Error:", error);
             alert("Error populating profile page");
         };
-
-        for (let i = 0; i < combinedArr.length; i++) {
-            console.log(combinedArr[i]);
-        }
+        // console.log(uniqueArr);
+        // for (let i = 0; i < combinedArr.length; i++) {
+        //     console.log(combinedArr[i]);
+        // }
     }
 
     useEffect(() => {
@@ -198,7 +210,7 @@ export function Profile() {
                         </Card>
                     </div>
                     <h1 className="progress-label">Your journey so far...</h1>
-                    <Chart chartType="LineChart" width="100%" height="400px" data={combinedArr} options={chartOptions} />
+                    <Chart chartType="LineChart" width="100%" height="400px" rows={combinedArr} columns={columns} options={chartOptions} />
                 </div>
             }
         </div> 

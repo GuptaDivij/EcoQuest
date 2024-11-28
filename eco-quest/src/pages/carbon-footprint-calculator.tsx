@@ -59,52 +59,52 @@ export function CarbonFootprintCalculator() {
 
         for (let i = 0; i < vals.length; i++) {
             if(vals[i].key === "waterVal") {
-                sum += (vals[i].value / 8.69049) * 0.18; // # gallons of water used in two months / # of weeks in two months (gallons of water used per week) * kg of co2 produced per gallon
+                sum += ((vals[i].value / 8.69049) * 0.18) / 2204.62; // # gallons of water used in two months / # of weeks in two months (gallons of water used per week) * kg of co2 produced per gallon
             } else if (vals[i].key === "gasVal") {
-                sum += (vals[i].value / 8.69049) * 8.887; // # gallons of gas used in two months / # of weeks in two months (gallons of water used per week) * kg of co2 produced per gallon 
+                sum += ((vals[i].value / 8.69049) * 8.887) / 1000; // # gallons of gas used in two months / # of weeks in two months (gallons of water used per week) * kg of co2 produced per gallon 
             } else if (vals[i].key === "electrictyVal") {
-                sum += (vals[i].value / 8.69049) * 0.417; // # kilowatt-hours of electricity used in two months / # of weeks in two months (kilowatt-hours of electricity used per week) * kg of co2 produced per kilowatt-hour 
+                sum += ((vals[i].value / 8.69049) * 0.417) / 1000; // # kilowatt-hours of electricity used in two months / # of weeks in two months (kilowatt-hours of electricity used per week) * kg of co2 produced per kilowatt-hour 
             } else if (vals[i].key === "grainsVal") {
-                sum += vals[i].value * (2.27 / 2.20462);
+                sum += (vals[i].value * (2.27 / 2.20462)) / 1000;
             } else if (vals[i].key === "legumesVal") {
-                sum += vals[i].value * (1.9766666667 / 2.20462);
+                sum += (vals[i].value * (1.9766666667 / 2.20462)) / 1000;
             } else if (vals[i].key === "fruitVal") {
-                sum += vals[i].value * (1.05833333333 / 2.20462);
+                sum += (vals[i].value * (1.05833333333 / 2.20462)) / 1000;
             } else if (vals[i].key === "vegetablesVal") {
-                sum += vals[i].value * (0.625 / 2.20462);
+                sum += (vals[i].value * (0.625 / 2.20462)) / 1000;
             } else if (vals[i].key === "nonDairyMilkVal") {
-                sum += vals[i].value * (0.6233333333 / 2.20462);
+                sum += (vals[i].value * (0.6233333333 / 2.20462)) / 1000;
             } else if (vals[i].key === "dairyVal") {
-                sum += vals[i].value * (13.515 / 2.20462);
+                sum += (vals[i].value * (13.515 / 2.20462)) / 1000;
             } else if (vals[i].key === "eggsVal") {
-                sum += vals[i].value * (4.67 / 2.20462);
+                sum += (vals[i].value * (4.67 / 2.20462)) / 1000;
             } else if (vals[i].key === "seafoodVal") {
-                sum += vals[i].value * (20.25 / 2.20462);
+                sum += (vals[i].value * (20.25 / 2.20462)) / 1000;
             } else if (vals[i].key === "meatVal") {
-                sum += vals[i].value * (40.345 / 2.20462);
+                sum += (vals[i].value * (40.345 / 2.20462)) / 1000;
             } else if (vals[i].key === "nutsVal") {
-                sum += vals[i].value * (1.83 / 2.20462);
+                sum += (vals[i].value * (1.83 / 2.20462)) / 1000;
             } else if (vals[i].key === "sugarVal") {
-                sum += vals[i].value * (24.925 / 2.20462);
+                sum += (vals[i].value * (24.925 / 2.20462)) / 1000;
             } else if (vals[i].key === "coffeeVal") {
-                sum += vals[i].value * (28.53 / 2.20462);
+                sum += (vals[i].value * (28.53 / 2.20462)) / 1000;
             } else if (vals[i].key === "wasteVal") {
-                sum += vals[i].value * (3.5 / 2.20462);
+                sum += ((vals[i].value * 0.453592) * 3.5) / 1000;
             } else if (vals[i].key === "clothingVal") {
-                sum += vals[i].value * (18.25 / 2.20462);
+                sum += ((vals[i].value * 0.453592) * 18.25) / 1000;
             }
         }
         
         for (let i = 0; i < carInfo.length; i++) {
             switch (carInfo[i].carType) {
                 case "Gasoline":
-                    sum += (Number(carInfo[i].milesDriven) / 22.9) * 8.89 / 0.993;
+                    sum += ((Number(carInfo[i].milesDriven) / 100) * 34) / 1000;
                     break;
                 case "Hybrid":
-                    sum += Number(carInfo[i].milesDriven) * 0.231;
+                    sum += ((Number(carInfo[i].milesDriven) / 100) * 23.1) / 1000;
                     break;
                 case "Electric":
-                    sum += (Number(carInfo[i].milesDriven) / 3.60) * 857 / 1000;
+                    sum += ((Number(carInfo[i].milesDriven) * 110)) / 1000000;
                     break;
             }
         }
@@ -112,16 +112,16 @@ export function CarbonFootprintCalculator() {
         for (let i = 0; i < pubTransInfo.length; i++) {
             switch (pubTransInfo[i].pubTransType) {
                 case "Bus":
-                    sum += Number(pubTransInfo[i].milesTraveled) * 0.089;
+                    sum += (Number(pubTransInfo[i].milesTraveled) * 0.089) / 1000;
                     break;
                 case "Train":
-                    sum += Number(pubTransInfo[i].milesTraveled) * 0.041;
+                    sum += (Number(pubTransInfo[i].milesTraveled) * 0.041) / 1000;
                     break;
                 case "Metro/Subway System":
-                    sum += Number(pubTransInfo[i].milesTraveled) * 0.053;
+                    sum += (Number(pubTransInfo[i].milesTraveled) * 0.053) / 1000;
                     break;
                 case "Airplane":
-                    sum += Number(pubTransInfo[i].milesTraveled) * 0.125;
+                    sum += (Number(pubTransInfo[i].milesTraveled) * 500) / 1000000;
                     break;
             }
         }
@@ -438,7 +438,7 @@ export function CarbonFootprintCalculator() {
 
                         <Button className="submit-button"onClick={calculateEmissions}>Submit</Button>
                     </div>
-                    {footprintCalculated === 0 ? null : <h1 className="result-text">This Week's Carbon Footprint: {footprintCalculated}</h1>}
+                    {footprintCalculated === 0 ? null : <h1 className="result-text">This Week's Carbon Footprint: {footprintCalculated} metric tons of CO2</h1>}
                 </CardBody>
             </Card>
         </div>
