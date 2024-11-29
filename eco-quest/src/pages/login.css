@@ -1,0 +1,19 @@
+.login-card {
+    margin-top: 100px;
+}
+
+.login-title {
+    font-size: 20px;
+    padding-bottom: 20px;
+}
+
+.login-input-field {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.login-submit-button {
+    margin: 15px;
+    margin-bottom: 40px;
+    background-color: #426B1F;
+}

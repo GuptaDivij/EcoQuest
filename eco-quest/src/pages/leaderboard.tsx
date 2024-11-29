@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion"; // For animations
+import './leaderboard.css';
 
 // Define the type for a leaderboard user
 type LeaderboardUser = {
@@ -27,17 +28,17 @@ export function Leaderboard() {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500 p-8">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500 p-8 leaderboard">
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
-        <h1 className="text-4xl font-bold text-center text-green-600 mb-8 animate-bounce">
+        <h1 className="text-4xl font-bold text-center text-green-600 mb-8 animate-bounce leaderboard-title">
           🌟 EcoQuest Leaderboard 🌟
         </h1>
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-green-100 text-green-700">
-              <th className="py-3 px-4 text-center">Rank</th>
-              <th className="py-3 px-4 text-center">User</th>
-              <th className="py-3 px-4 text-center">Footprint</th>
+              <th className="py-3 px-4 text-center leaderboard-column-title">Rank</th>
+              <th className="py-3 px-4 text-center leaderboard-column-title">User</th>
+              <th className="py-3 px-4 text-center leaderboard-column-title">Carbon Footprint (metric tons)</th>
             </tr>
           </thead>
           <tbody>

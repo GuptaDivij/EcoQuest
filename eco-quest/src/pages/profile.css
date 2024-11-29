@@ -41,6 +41,7 @@
   }
   .recommendation {
       margin: 20px;
+      align-items: center;
   }
   .recommendations-section {
       position: relative;
@@ -57,7 +58,7 @@
       font-weight: 300;
       font-style: normal;
       font-size: 18px;
-      text-align: left;
+      text-align: center;
   }
   .footprint-performance {
       font-weight: 600;
@@ -77,4 +78,10 @@
   .recommendation-card {
     margin-top: 20px;
     width: 900px;
+  }
+
+  .recommendation-icon {
+    margin-right: 15px;
+    width: 35px;
+    height: 35px;
   }
