@@ -1,0 +1,14 @@
+.leaderboard {
+    margin-top: 100px;
+}
+
+.leaderboard-title {
+    margin-bottom: 50px;
+    color: #426B1F;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.leaderboard-column-title {
+    color: #5f972e;
+}

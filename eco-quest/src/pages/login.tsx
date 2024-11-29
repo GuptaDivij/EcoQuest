@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Input, Button, Card, Spacer } from "@nextui-org/react";
 import { Link, useNavigate } from "react-router-dom";
+import './login.css';
 
 export function Login() {
   // States to hold user input
@@ -48,8 +49,8 @@ export function Login() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <Card className="p-10 w-full max-w-md shadow-md">
-        <h1 className="text-center text-3xl font-bold mb-6">Login</h1>
+      <Card className="p-10 w-full max-w-md shadow-md login-card">
+        <h1 className="text-center text-3xl font-bold mb-6 login-title">Login</h1>
         <form className="flex flex-col gap-4" onSubmit = {handleSubmit}>
           <Input 
             type="email" 
@@ -58,6 +59,7 @@ export function Login() {
             required
             value = {email}
             onChange = {(e) => setEmail(e.target.value)}
+            className="login-input-field"
           />
           <Input
             type="password"
@@ -66,9 +68,10 @@ export function Login() {
             required
             value = {password}
             onChange = {(e) => setPassword(e.target.value)}
+            className="login-input-field"
           />
           <Spacer y={1} />
-          <Button type="submit" color="primary">
+          <Button type="submit" color="primary" className="login-submit-button">
             Login
           </Button>
         </form>
