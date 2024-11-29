@@ -41,14 +41,17 @@ export function Profile() {
     const [landfillIsClicked, setLandfillIsClicked] = useState(false);
     const [clothingIsClicked, setClothingIsClicked] = useState(false);
 
-    const combinedArr = [
-        [new Date("2024-11-28T10:54:46.979Z"), 1.228939185215128],
-        [new Date("2024-11-28T10:53:20.485Z"), 0.4620709334009983],
-        [new Date("2024-11-28T10:52:13.121Z"), 0.8193604742544739],
-        [new Date("2024-11-28T10:51:37.193Z"), 0.8193604742544739]
-    ];
+    // const combinedArr = [
+    //     [new Date("2024-11-28T10:54:46.979Z"), 1.228939185215128],
+    //     [new Date("2024-11-28T10:53:20.485Z"), 0.4620709334009983],
+    //     [new Date("2024-11-28T10:52:13.121Z"), 0.8193604742544739],
+    //     [new Date("2024-11-28T10:51:37.193Z"), 0.8193604742544739]
+    // ];
     // const combinedArr: any[] = [];
     // let uniqueArr: any[] = [];
+    const [combinedArr, setCombinedArr] = useState<[Date, number][]>([]);
+
+
     const columns = [{label: 'Timestamp', type: 'datetime'}, {label: 'Carbon Footprint', type: 'number'}];
     const chartOptions = {
         hAxis: {
@@ -92,6 +95,13 @@ export function Profile() {
                 // for (let i = 0; i < data.allFootprintData.length; i++) {
                 //     combinedArr.push([new Date((data.allFootprintData[i].timestamp).toString()), Number(data.allFootprintData[i].footprint)]);
                 // }
+                const newEntries = data.allFootprintData.map((entry: any) => [
+                    new Date((entry.timestamp).toString()),
+                    Number(entry.footprint),
+                ]);
+                setCombinedArr(newEntries);
+
+
             }
             // const uniqueSet = new Set(
             //     combinedArr.map(item => JSON.stringify(item)) // Convert each object to a string
