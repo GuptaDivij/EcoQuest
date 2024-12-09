@@ -202,7 +202,6 @@ app.get("/leaderboard", async (req, res) => {
       const leaderboard = await userFootprintsCollection
         .find()
         .sort({ footprint: 1 })
-        .limit(10)
         .toArray();
       res.status(200).json(leaderboard);
     } catch (error) {
