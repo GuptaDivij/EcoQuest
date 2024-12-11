@@ -1,6 +1,5 @@
 .calculator-form {
     margin-top: 80px;
-    margin-bottom: 80px;
 }
 .form-body {
     margin: 10px;
@@ -70,4 +69,43 @@
     font-size: 20px;
     font-weight: 500;
     color: #426B1F;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+}
+
+.calculation-card {
+    margin: 100px;
+}
+
+.calculation-content {
+    margin: 30px;
+}
+
+.calculation-header {
+    font-size: 30px;
+    color: #426B1F;
+    font-weight: 500;
+}
+
+.calculation-section-header {
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 20px;
+    color: #5f972e;
+}
+
+.calculation-section-link {
+    margin-top: 10px;
+}
+
+.calculation-section-equations {
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+.calculation-section-equation {
+    margin-top: 10px;
 }
