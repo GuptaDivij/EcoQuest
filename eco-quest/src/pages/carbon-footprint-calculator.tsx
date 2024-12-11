@@ -650,6 +650,8 @@ export function CarbonFootprintCalculator() {
                         <p className="calculation-section-equation"># of kilograms of clothing purchased this week * 18.25 kg of CO2 produced per kg of clothing = # of kg of CO2 generated this week from clothing</p>
                         <p className="calculation-section-equation"># of kg of CO2 generated this week from clothing / 1,000 (conversion factor from kg to metric tons) = # of  metric tons of CO2 produced from clothing this week</p>
                     </div>
+
+                    <p className="calculation-result">Carbon Footprint → Add up all Carbon Emissions</p>
                 </div>
             </Card>
         </div>

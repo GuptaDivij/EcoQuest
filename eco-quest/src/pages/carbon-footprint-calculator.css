@@ -109,3 +109,10 @@
 .calculation-section-equation {
     margin-top: 10px;
 }
+
+.calculation-result {
+    font-size: 25px;
+    color: #426B1F;
+    font-weight: 700;
+    margin-top: 30px;
+}
