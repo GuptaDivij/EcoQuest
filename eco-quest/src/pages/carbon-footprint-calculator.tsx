@@ -6,6 +6,19 @@ import './carbon-footprint-calculator.css';
 import { useNavigate } from 'react-router-dom';
 
 export function CarbonFootprintCalculator() {
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    // Check if the user is logged in, to store footprint data
+    useEffect(() => {
+        fetch("http://localhost:5000/session", {
+        method: "GET",
+        credentials: "include"
+        })
+        .then((res) => res.json())
+        .then((data) => setLoggedIn(data.loggedIn))
+        .catch((err) => console.error("Error fetching session:", err));
+    }, []);
+
 
     const [gasCarUsage, setGasCarUsage] = useState(0);
     const [electricCarUsage, setElectricCarUsage] = useState(0);
@@ -287,41 +300,35 @@ export function CarbonFootprintCalculator() {
                 metroPubTransVal: metroUsage, airplanePubTransVal: airplaneUsage,
             };
 
-            try {
-                const response = await fetch("http://localhost:5000/storefootprint", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "include",
-                    body: JSON.stringify(footprint)
-                });
-    
-                if (response.ok) {
-                    alert("Footprint logged successfully");
-                }
-                else {
-                    const errorData = await response.json();
-                    alert(errorData.message || "Footprint log failed");
-                }
-            
-            } catch (error) {
-                console.error("Error:", error);
-                alert("Error logging footprint");
-            };
-            navigate('/profile', { state: vals });
+            // Store footprint calculation in database if user is logged in
+            if (loggedIn) {
+                try {
+                    const response = await fetch("http://localhost:5000/storefootprint", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        credentials: "include",
+                        body: JSON.stringify(footprint)
+                    });
+        
+                    if (response.ok) {
+                        alert("Footprint logged successfully");
+                    }
+                    else {
+                        const errorData = await response.json();
+                        alert(errorData.message || "Footprint log failed");
+                    }
+                
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Error logging footprint");
+                };
+                navigate('/profile', { state: vals });
+            }
         };
-        if (footprintCalculated !== 0 && (
-            waterVal !== 0 || gasVal !== 0 || electricityVal !== 0 ||
-            gasVal !== 0 || electricityVal !== 0 || grainsVal !== 0 ||
-            legumesVal !== 0 || fruitVal !== 0 || vegetablesVal !== 0 ||
-            nonDairyMilkVal !== 0 || dairyVal !== 0 || eggsVal !== 0 ||
-            seafoodVal !== 0 || meatVal !== 0 || nutsVal !== 0 || sugarVal !== 0 ||
-            coffeeVal !== 0 || wasteVal !== 0 || clothingVal !== 0 || clothingVal !== 0 ||
-            gasolineCarVal !== 0 || hybridCarVal !== 0 || electricCarVal !== 0 ||
-            busPubTransVal !== 0 || trainPubTransVal !== 0 || metroPubTransVal !== 0 ||
-            airplanePubTransVal !== 0
-        )) {
+        if (footprintCalculated !== 0 || Object.values(userInput).some(val => val !== 0)) 
+        {
             handleSubmit();
         }
     }, [footprintCalculated]);

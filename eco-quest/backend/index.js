@@ -211,6 +211,28 @@ app.get("/leaderboard", async (req, res) => {
   });
 
 
+// Session endpoint
+app.get("/session", async (req, res) => {
+    if (req.session && req.session.user) {
+        res.json({ loggedIn: true, user: req.session.user });
+    }
+    else {
+        res.json({ loggedIn: false });
+    }
+});
+
+// Log out endpoint
+app.post("/logout", async (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Failed to terminate session:", err);
+            return res.status(500).json({ success: false, message: "Log out failed" });
+        }
+        res.clearCookie("connect.sid");
+        res.json({ success: true, message: "Log out successful" });
+    });
+});
+
 // Server start
 app.listen(5000, () => {
     console.log('Server is listening on port 5000');
