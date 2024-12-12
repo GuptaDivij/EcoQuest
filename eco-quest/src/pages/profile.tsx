@@ -71,7 +71,7 @@ export function Profile() {
             });
 
             if (!response.ok) {
-                alert('Error fetching user info');
+                //alert('Error fetching user info');
             } else {
                 const data = await response.json();
 
@@ -96,7 +96,7 @@ export function Profile() {
 
         } catch (error) {
             console.error("Error:", error);
-            alert("Error populating profile page");
+            //alert("Error populating profile page");
         };
     }
 

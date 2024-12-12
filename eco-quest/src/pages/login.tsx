@@ -32,18 +32,18 @@ export function Login() {
       });
 
       if (response.ok) {
-        alert("Login successful");
+        //alert("Login successful");
         navigate('/profile');
       }
       else {
         const errorData = await response.json();
-        alert(errorData.message || "Login failed");
+        //alert(errorData.message || "Login failed");
       }
 
 
     } catch (error) {
       console.error("Error:", error);
-      alert("Error logging in");
+      //alert("Error logging in");
     };
   };
 

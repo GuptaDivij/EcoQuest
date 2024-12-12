@@ -313,16 +313,16 @@ export function CarbonFootprintCalculator() {
                     });
         
                     if (response.ok) {
-                        alert("Footprint logged successfully");
+                        //alert("Footprint logged successfully");
                     }
                     else {
                         const errorData = await response.json();
-                        alert(errorData.message || "Footprint log failed");
+                        //alert(errorData.message || "Footprint log failed");
                     }
                 
                 } catch (error) {
                     console.error("Error:", error);
-                    alert("Error logging footprint");
+                    //alert("Error logging footprint");
                 };
                 navigate('/profile', { state: vals });
             }

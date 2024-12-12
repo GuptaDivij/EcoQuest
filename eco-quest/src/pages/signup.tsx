@@ -35,18 +35,18 @@ export function Signup() {
       });
 
       if (response.ok) {
-        alert("Signup successful");
+        //alert("Signup successful");
         navigate('/login');
       }
       else {
         const errorData = await response.json();
-        alert(errorData.message || "Signup failed");
+        //alert(errorData.message || "Signup failed");
       }
   
   
     } catch (error) {
       console.error("Error:", error);
-      alert("Error signing up");
+      //alert("Error signing up");
     };
 
   };
